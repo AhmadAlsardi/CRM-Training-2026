@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Projects - Smart Media JO</title>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #334155; }
+    </style>
+</head>
+<body class="p-4 space-y-4">
+
+    <!-- Top Action Buttons -->
+    <div class="flex justify-between items-center relative z-20">
+        <button class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm text-slate-600 hover:bg-slate-50">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+
+        <!-- Filter Dropdown Button -->
+        <div class="relative">
+            <button onclick="toggleFilterMenu()" class="w-9 h-9 bg-white border-2 border-blue-500 rounded-lg shadow-sm flex items-center justify-center text-slate-700 hover:bg-slate-50 transition">
+                <i class="fa-solid fa-filter text-slate-700"></i>
+            </button>
+
+            <!-- Filter Dropdown Menu -->
+            <div id="filter-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs">
+                <a href="#" onclick="filterProjects('All')" class="block px-4 py-2 text-slate-700 hover:bg-slate-50 font-medium">All</a>
+                <a href="#" onclick="filterProjects('Not Started')" class="block px-4 py-2 text-slate-700 hover:bg-slate-50 border-t border-slate-100">Not Started</a>
+                <a href="#" onclick="filterProjects('In Progress')" class="block px-4 py-2 text-slate-700 hover:bg-slate-50">In Progress</a>
+                <a href="#" onclick="filterProjects('On Hold')" class="block px-4 py-2 text-slate-700 hover:bg-slate-50">On Hold</a>
+                <a href="#" onclick="filterProjects('Cancelled')" class="block px-4 py-2 text-slate-700 hover:bg-slate-50">Cancelled</a>
+                <a href="#" onclick="filterProjects('Finished')" class="block px-4 py-2 text-slate-700 hover:bg-slate-50">Finished</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN PROJECTS TABLE VIEW -->
+    <div id="projects-view" class="space-y-4">
+        <!-- Projects Summary Panel -->
+        <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-5 space-y-4">
+            <h2 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-regular fa-file-lines text-slate-500"></i> Projects Summary
+            </h2>
+
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 text-xs pt-2 border-t border-slate-100">
+                <div>
+                    <span class="font-bold text-slate-800 text-sm">0</span>
+                    <span class="text-slate-400 ml-1">Not Started</span>
+                </div>
+                <div>
+                    <span id="stat-in-progress" class="font-bold text-blue-600 text-sm">1</span>
+                    <span class="text-blue-500 ml-1">In Progress</span>
+                </div>
+                <div>
+                    <span class="font-bold text-amber-600 text-sm">0</span>
+                    <span class="text-amber-500 ml-1">On Hold</span>
+                </div>
+                <div>
+                    <span class="font-bold text-slate-400 text-sm">0</span>
+                    <span class="text-slate-400 ml-1">Cancelled</span>
+                </div>
+                <div>
+                    <span class="font-bold text-emerald-600 text-sm">0</span>
+                    <span class="text-emerald-500 ml-1">Finished</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Controls & Export Bar -->
+        <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-4 space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+                <div class="flex items-center gap-2">
+                    <select class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg font-medium">
+                        <option>25</option>
+                        <option>50</option>
+                    </select>
+                    <button class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg font-medium hover:bg-slate-100">Export</button>
+                    <button class="p-1.5 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100"><i class="fa-solid fa-rotate text-slate-500"></i></button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <input type="date" class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
+                    <span class="text-slate-400">to</span>
+                    <input type="date" class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
+                </div>
+
+                <div class="relative w-48">
+                    <input type="text" placeholder="Search.." class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-[11px]"></i>
+                </div>
+            </div>
+
+            <!-- Projects Data Table -->
+            <div class="border border-slate-100 rounded-lg overflow-x-auto text-xs">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                        <tr>
+                            <th class="p-3">#</th>
+                            <th class="p-3">Project Name</th>
+                            <th class="p-3">Customer</th>
+                            <th class="p-3">Tags</th>
+                            <th class="p-3">Start Date</th>
+                            <th class="p-3">Deadline</th>
+                            <th class="p-3">Members</th>
+                            <th class="p-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projects-table-body">
+                        <tr class="border-t border-slate-100 hover:bg-amber-50/50 transition cursor-pointer" onclick="openProjectDetails('test')">
+                            <td class="p-3 font-bold text-slate-600">1</td>
+                            <td class="p-3 font-bold text-blue-600 hover:underline">test</td>
+                            <td class="p-3 text-slate-600">Smart Media JO</td>
+                            <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px]">Internal</span></td>
+                            <td class="p-3 text-slate-500">2026-08-17</td>
+                            <td class="p-3 text-slate-500">2026-09-01</td>
+                            <td class="p-3">
+                                <img src="https://system.smartmediajo.com/assets/images/user-placeholder.jpg" class="w-6 h-6 rounded-full border border-blue-400">
+                            </td>
+                            <td class="p-3">
+                                <span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 font-bold rounded-full text-[10px]">In Progress</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAILED PROJECT VIEW (تفاصيل المشروع بالجهة اليمنى والمهام بالجهة اليسرى) -->
+    <div id="project-details-view" class="hidden space-y-4">
+        <div class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm">
+            <button onclick="closeProjectDetails()" class="text-xs font-semibold text-blue-600 hover:underline flex items-center gap-1.5">
+                <i class="fa-solid fa-arrow-left"></i> Back to Projects Table
+            </button>
+            <span class="text-xs font-bold text-slate-700">Project Workspace: <span class="text-blue-600">test</span></span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- RIGHT SIDE: Real Project Metadata -->
+            <div class="space-y-4 order-1 lg:order-2">
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-5 space-y-4">
+                    <h3 class="text-xs font-bold uppercase text-slate-400 border-b border-slate-100 pb-2">Project Details</h3>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <span class="text-slate-400 block mb-0.5">Project Name</span>
+                            <span class="font-bold text-slate-800 text-sm">test</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block mb-0.5">Customer</span>
+                            <span class="font-semibold text-slate-700">Smart Media JO</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <span class="text-slate-400 block mb-0.5">Start Date</span>
+                                <span class="font-medium text-slate-700">2026-08-17</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block mb-0.5">Deadline</span>
+                                <span class="font-medium text-slate-700">2026-09-01</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block mb-0.5">Logged Hours</span>
+                            <span class="font-bold text-blue-600 text-sm">04:30 Hrs</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block mb-1">Status Bar</span>
+                            <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-700 font-bold rounded-full text-[10px]">In Progress</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEFT SIDE: Tasks List & Manual Time Entry -->
+            <div class="lg:col-span-2 space-y-4 order-2 lg:order-1">
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-5 space-y-4">
+                    <h3 class="text-xs font-bold uppercase text-slate-700 flex items-center gap-1.5 border-b border-slate-100 pb-3">
+                        <i class="fa-solid fa-list-check text-amber-500"></i> Tasks Assigned to "test"
+                    </h3>
+
+                    <div class="border border-slate-100 rounded-lg overflow-hidden text-xs">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="p-3">#</th>
+                                    <th class="p-3">Task Title</th>
+                                    <th class="p-3">Logged Time</th>
+                                    <th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-t border-slate-100 hover:bg-slate-50">
+                                    <td class="p-3 font-bold text-slate-500">1</td>
+                                    <td class="p-3 font-semibold text-slate-800">Task 1 - Initial Setup</td>
+                                    <td class="p-3 font-bold text-emerald-600">02:15 Hrs</td>
+                                    <td class="p-3"><span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-700 font-bold rounded-full text-[10px]">Complete</span></td>
+                                </tr>
+                                <tr class="border-t border-slate-100 hover:bg-slate-50">
+                                    <td class="p-3 font-bold text-slate-500">2</td>
+                                    <td class="p-3 font-semibold text-slate-800">Task 2 - UI Design & Review</td>
+                                    <td class="p-3 font-bold text-blue-600">02:15 Hrs</td>
+                                    <td class="p-3"><span class="px-2.5 py-0.5 bg-amber-100 text-amber-700 font-bold rounded-full text-[10px]">In Progress</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFilterMenu() {
+            document.getElementById('filter-menu').classList.toggle('hidden');
+        }
+
+        function filterProjects(status) {
+            document.getElementById('filter-menu').classList.add('hidden');
+            const tbody = document.getElementById('projects-table-body');
+
+            if (status === 'All' || status === 'In Progress') {
+                tbody.innerHTML = `
+                    <tr class="border-t border-slate-100 hover:bg-amber-50/50 transition cursor-pointer" onclick="openProjectDetails('test')">
+                        <td class="p-3 font-bold text-slate-600">1</td>
+                        <td class="p-3 font-bold text-blue-600 hover:underline">test</td>
+                        <td class="p-3 text-slate-600">Smart Media JO</td>
+                        <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px]">Internal</span></td>
+                        <td class="p-3 text-slate-500">2026-08-17</td>
+                        <td class="p-3 text-slate-500">2026-09-01</td>
+                        <td class="p-3"><img src="https://system.smartmediajo.com/assets/images/user-placeholder.jpg" class="w-6 h-6 rounded-full border border-blue-400"></td>
+                        <td class="p-3"><span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 font-bold rounded-full text-[10px]">In Progress</span></td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">No entries found</td></tr>`;
+            }
+        }
+
+        function openProjectDetails(projectName) {
+            document.getElementById('projects-view').classList.add('hidden');
+            document.getElementById('project-details-view').classList.remove('hidden');
+        }
+
+        function closeProjectDetails() {
+            document.getElementById('project-details-view').classList.add('hidden');
+            document.getElementById('projects-view').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

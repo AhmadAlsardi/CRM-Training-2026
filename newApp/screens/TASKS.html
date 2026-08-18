@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - Smart Media</title>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://system.smartmediajo.com/assets/builds/vendor-admin.css?v=3.0.4">
+    <link rel="stylesheet" href="https://system.smartmediajo.com/assets/css/style.min.css?v=3.0.4">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #334155; }
+    </style>
+</head>
+<body class="app admin tasks-page tasks user-id-192 chrome page-small" style="background-color: #f1f5f9; padding: 20px;">
+
+    <!-- عرض جدول القائمة الرئيسية (Tasks List View) -->
+    <div id="tasks-list-view">
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center gap-2">
+                <button class="btn btn-default btn-sm"><i class="fa-solid fa-grip-vertical"></i></button>
+            </div>
+<!-- Top Action Buttons Bar -->
+    <div class="flex justify-between items-center mb-4 relative">
+        <div class="flex items-center gap-2 relative">
+            <a href="#" class="btn btn-success btn-sm font-semibold">Tasks Overview</a>
+            
+            <!-- زر الفلتر مع القائمة المنبثقة -->
+            <div class="relative">
+                <button onclick="toggleFilterDropdown()" class="btn btn-default btn-sm focus:outline-none" id="filter-btn">
+                    <i class="fa fa-filter"></i>
+                </button>
+                
+                <!-- قائمة الفلتر المنبثقة -->
+                <div id="filter-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-200 z-50 py-1 text-sm text-slate-700">
+                    <a href="#" onclick="applyFilter('All')" class="block px-4 py-2 hover:bg-slate-100 font-medium">All</a>
+                    <div class="border-t border-slate-100 my-1"></div>
+                    <a href="#" onclick="applyFilter('Not Started')" class="block px-4 py-2 hover:bg-slate-100">Not Started</a>
+                    <a href="#" onclick="applyFilter('In Progress')" class="block px-4 py-2 hover:bg-slate-100">In Progress</a>
+                    <a href="#" onclick="applyFilter('Testing')" class="block px-4 py-2 hover:bg-slate-100">Testing</a>
+                    <a href="#" onclick="applyFilter('Awaiting Feedback')" class="block px-4 py-2 hover:bg-slate-100">Awaiting Feedback</a>
+                    <a href="#" onclick="applyFilter('Complete')" class="block px-4 py-2 hover:bg-slate-100">Complete</a>
+                    <div class="border-t border-slate-100 my-1"></div>
+                    <a href="#" onclick="applyFilter('Today\'s tasks')" class="block px-4 py-2 hover:bg-slate-100">Today's tasks</a>
+                    <a href="#" onclick="applyFilter('Due Date Passed')" class="block px-4 py-2 hover:bg-slate-100">Due Date Passed</a>
+                    <a href="#" onclick="applyFilter('Upcoming Tasks')" class="block px-4 py-2 hover:bg-slate-100">Upcoming Tasks</a>
+                    <div class="border-t border-slate-100 my-1"></div>
+                    <a href="#" onclick="applyFilter('Tasks assigned to me')" class="block px-4 py-2 hover:bg-slate-100">Tasks assigned to me</a>
+                    <a href="#" onclick="applyFilter('Tasks i\'m following')" class="block px-4 py-2 hover:bg-slate-100">Tasks i'm following</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+
+        <div class="panel_s shadow-sm border border-slate-200 rounded-lg bg-white p-5">
+            <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-flex tw-items-center gap-2 text-slate-700 mb-4">
+                <i class="fa-regular fa-file-lines text-slate-500"></i> Tasks Summary
+            </h4>
+            
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 pb-4 border-b border-slate-200">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-lg text-slate-800">0</span>
+                        <span class="text-slate-500 font-medium">Not Started</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Tasks assigned to me: 0</p>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-lg text-blue-600">0</span>
+                        <span class="text-blue-600 font-medium">In Progress</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Tasks assigned to me: 0</p>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-lg text-sky-600">0</span>
+                        <span class="text-sky-600 font-medium">Testing</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Tasks assigned to me: 0</p>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-lg text-lime-600">0</span>
+                        <span class="text-lime-600 font-medium">Awaiting Feedback</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Tasks assigned to me: 0</p>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-lg text-emerald-600">27</span>
+                        <span class="text-emerald-600 font-medium">Complete</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Tasks assigned to me: 0</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 my-4">
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <select class="form-control input-sm" style="width: 75px;"><option>25</option></select>
+                    <button class="btn btn-default btn-sm">Export</button>
+                    <button class="btn btn-default btn-sm">Bulk Actions</button>
+                    <button class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                </div>
+                <div class="w-full sm:w-72">
+                    <div class="input-group input-group-sm w-full">
+                        <span class="input-group-addon bg-slate-50"><i class="fa fa-search"></i></span>
+                        <input type="search" class="form-control input-sm" placeholder="Search..">
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive border border-slate-200 rounded-lg overflow-hidden">
+                <table class="table table-tasks dataTable no-footer w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                            <th class="p-3"><input type="checkbox"></th>
+                            <th class="p-3">#</th>
+                            <th class="p-3">Name</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3">Start Date</th>
+                            <th class="p-3">Due Date <i class="fa fa-sort-asc text-[10px]"></i></th>
+                            <th class="p-3">Assigned to</th>
+                            <th class="p-3">Tags</th>
+                            <th class="p-3">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-slate-100 hover:bg-slate-50">
+                            <td class="p-3"><input type="checkbox"></td>
+                            <td class="p-3 font-bold text-slate-700">1</td>
+                            <td class="p-3 font-semibold text-blue-600 hover:underline cursor-pointer" onclick="openTaskDetail('Task 1 - Initial System Setup')">Task 1 - Initial System Setup</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-700 font-bold">Complete</span></td>
+                            <td class="p-3 text-slate-500">2026-08-17</td>
+                            <td class="p-3 text-slate-500">2026-08-20</td>
+                            <td class="p-3 text-slate-700">Interns SM</td>
+                            <td class="p-3 text-slate-500">System</td>
+                            <td class="p-3 font-bold text-rose-600">High</td>
+                        </tr>
+                        <tr class="border-b border-slate-100 hover:bg-slate-50">
+                            <td class="p-3"><input type="checkbox"></td>
+                            <td class="p-3 font-bold text-slate-700">2</td>
+                            <td class="p-3 font-semibold text-blue-600 hover:underline cursor-pointer" onclick="openTaskDetail('Task 2 - UI Design & Review')">Task 2 - UI Design & Review</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-blue-100 text-blue-700 font-bold">In Progress</span></td>
+                            <td class="p-3 text-slate-500">2026-08-18</td>
+                            <td class="p-3 text-slate-500">2026-08-25</td>
+                            <td class="p-3 text-slate-700">Interns SM</td>
+                            <td class="p-3 text-slate-500">Design</td>
+                            <td class="p-3 font-bold text-amber-600">Medium</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- عرض تفاصيل المهمة (Task Detail View) - مخفي افتراضياً -->
+    <div id="task-detail-view" class="hidden">
+        <section class="content">
+            <button class="btn btn-light back-link mb-4" onclick="backToTasks()"><i class="fa-solid fa-arrow-left"></i> Back to tasks list</button>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- القسم الرئيسي الأيسر -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 id="task-title-text" class="text-xl font-bold text-slate-800">Design Training Task</h2>
+                            <span class="px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-700 font-bold">In Progress</span>
+                        </div>
+                        
+                        <h3 class="font-semibold text-sm text-slate-700 mb-3">Task Information</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                            <div class="p-3 bg-slate-50 rounded border border-slate-200">
+                                <div class="text-xs text-slate-500">Status</div>
+                                <div class="font-semibold text-slate-800 mt-1">In Progress</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded border border-slate-200">
+                                <div class="text-xs text-slate-500">Priority</div>
+                                <div class="font-semibold text-slate-800 mt-1">Medium</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded border border-slate-200">
+                                <div class="text-xs text-slate-500">Start Date</div>
+                                <div class="font-semibold text-slate-800 mt-1">2026-08-10</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded border border-slate-200">
+                                <div class="text-xs text-slate-500">Due Date</div>
+                                <div class="font-semibold text-slate-800 mt-1">2026-08-15</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded border border-slate-200">
+                                <div class="text-xs text-slate-500">Your logged time</div>
+                                <div class="font-semibold text-slate-800 mt-1" id="yourLogged">00:00:00</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded border border-slate-200">
+                                <div class="text-xs text-slate-500">Total logged time</div>
+                                <div class="font-semibold text-slate-800 mt-1" id="totalLogged">00:00:00</div>
+                            </div>
+                        </div>
+
+                        <!-- قسم التعليقات -->
+                        <h3 class="font-semibold text-sm text-slate-700 mb-2">Comments</h3>
+                        <p class="text-xs text-slate-500 mb-3">Write what was completed and add the link only.</p>
+                        <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                            <input id="commentText" class="form-control text-sm flex-1" placeholder="What was completed?">
+                            <input id="commentUrl" class="form-control text-sm flex-1" placeholder="https://...">
+                            <button class="btn btn-primary btn-sm" onclick="addComment()">Add Comment</button>
+                        </div>
+                        <div id="commentsList" class="text-xs text-slate-500 border-t border-slate-100 pt-3">
+                            No comments yet.
+                        </div>
+                    </div>
+
+                    <!-- جدول الأوقات -->
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+                        <h3 class="font-semibold text-sm text-slate-700 mb-4">Timesheets</h3>
+                        <div class="table-responsive border border-slate-200 rounded overflow-hidden">
+                            <table class="table w-full text-xs text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-600">
+                                        <th class="p-3">#</th>
+                                        <th class="p-3">Date</th>
+                                        <th class="p-3">Start</th>
+                                        <th class="p-3">End</th>
+                                        <th class="p-3">Duration</th>
+                                        <th class="p-3">Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="timesheetsBody">
+                                    <tr>
+                                        <td colspan="6" class="p-4 text-center text-slate-500">No timesheets yet.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الشريط الجانبي الأيمن (العداد والمشرفين) -->
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm text-center">
+                        <div class="text-xs font-bold text-slate-500 tracking-wider mb-2">WORK TIMER</div>
+                        <div class="text-3xl font-mono font-bold text-slate-800 mb-4" id="timerDisplay">00:00:00</div>
+                        <button id="timerBtn" class="btn btn-success w-full font-semibold" onclick="toggleTimer()">Start Timer</button>
+                        <p class="text-xs text-slate-400 mt-3">Stop the timer during breaks.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-4 text-xs">
+                        <div>
+                            <b class="text-slate-700 block mb-2">Assignees</b>
+                            <div class="flex items-center gap-2 text-slate-600 font-medium">
+                                <span class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-700 text-[10px]">TE</span> Training Employee
+                            </div>
+                        </div>
+                        <div class="border-t border-slate-100 pt-3">
+                            <b class="text-slate-700 block mb-2">Followers</b>
+                            <div class="flex items-center gap-2 text-slate-600 font-medium">
+                                <span class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-700 text-[10px]">TS</span> Training Supervisor
+                            </div>
+                        </div>
+                        <div class="border-t border-slate-100 pt-3">
+                            <b class="text-slate-700 block mb-2">Tags</b>
+                            <span class="px-2 py-1 bg-slate-100 rounded text-slate-600 font-semibold">Design</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- نافذة إدخال الملاحظات عند إيقاف العداد (Modal) -->
+    <div id="notesModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden border border-slate-200">
+            <div class="bg-amber-400 text-slate-900 px-5 py-3 flex justify-between items-center font-bold">
+                <span>Stop Timer</span>
+                <button onclick="closeNotesModal()" class="text-slate-900 hover:text-black"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Notes</label>
+                    <textarea id="timerNotesInput" class="form-control w-full h-28 text-sm" placeholder="Write what you worked on..."></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button class="btn btn-default btn-sm" onclick="closeNotesModal()">Cancel</button>
+                    <button class="btn btn-primary btn-sm" onclick="saveTimerEntry()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval = null;
+        let secondsElapsed = 0;
+        let isRunning = false;
+        let startTimeStr = "";
+        let timesheetRecords = [];
+
+        function openTaskDetail(taskName) {
+            document.getElementById('tasks-list-view').classList.add('hidden');
+            document.getElementById('task-detail-view').classList.remove('hidden');
+            document.getElementById('task-title-text').innerText = taskName;
+        }
+
+        function backToTasks() {
+            document.getElementById('task-detail-view').classList.add('hidden');
+            document.getElementById('tasks-list-view').classList.remove('hidden');
+        }
+
+        function formatTime(totalSeconds) {
+            let hrs = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            let mins = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            let secs = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${hrs}:${mins}:${secs}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('timerBtn');
+            if (!isRunning) {
+                // بدء العداد
+                isRunning = true;
+                btn.innerText = "Stop Timer";
+                btn.className = "btn btn-danger w-full font-semibold";
+                let now = new Date();
+                startTimeStr = now.toLocaleTimeString();
+                
+                timerInterval = setInterval(() => {
+                    secondsElapsed++;
+                    document.getElementById('timerDisplay').innerText = formatTime(secondsElapsed);
+                }, 1000);
+            } else {
+                // إيقاف العداد وإظهار نافذة الملاحظات
+                clearInterval(timerInterval);
+                document.getElementById('notesModal').classList.remove('hidden');
+            }
+        }
+
+        function closeNotesModal() {
+            document.getElementById('notesModal').classList.add('hidden');
+            // استئناف العداد إذا ألغى الحفظ
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                document.getElementById('timerDisplay').innerText = formatTime(secondsElapsed);
+            }, 1000);
+        }
+
+        function saveTimerEntry() {
+            let notes = document.getElementById('timerNotesInput').value;
+            let endTimeStr = new Date().toLocaleTimeString();
+            let currentDate = new Date().toISOString().split('T')[0];
+            let durationStr = formatTime(secondsElapsed);
+
+            timesheetRecords.push({
+                date: currentDate,
+                start: startTimeStr,
+                end: endTimeStr,
+                duration: durationStr,
+                notes: notes || '-'
+            });
+
+            // تحديث الأوقات في الشاشة
+            document.getElementById('yourLogged').innerText = durationStr;
+            document.getElementById('totalLogged').innerText = durationStr;
+
+            // تحديث الجدول
+            let tbody = document.getElementById('timesheetsBody');
+            tbody.innerHTML = "";
+            timesheetRecords.forEach((rec, index) => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-slate-100 hover:bg-slate-50">
+                        <td class="p-3">${index + 1}</td>
+                        <td class="p-3">${rec.date}</td>
+                        <td class="p-3">${rec.start}</td>
+                        <td class="p-3">${rec.end}</td>
+                        <td class="p-3">${rec.duration}</td>
+                        <td class="p-3">${rec.notes}</td>
+                    </tr>
+                `;
+            });
+
+            // إعادة تعيين العداد
+            document.getElementById('notesModal').classList.add('hidden');
+            document.getElementById('timerNotesInput').value = "";
+            secondsElapsed = 0;
+            document.getElementById('timerDisplay').innerText = "00:00:00";
+            isRunning = false;
+            let btn = document.getElementById('timerBtn');
+            btn.innerText = "Start Timer";
+            btn.className = "btn btn-success w-full font-semibold";
+        }
+
+        function addComment() {
+            let text = document.getElementById('commentText').value;
+            let url = document.getElementById('commentUrl').value;
+
+            if (!text && !url) return;
+
+            let listDiv = document.getElementById('commentsList');
+            if (listDiv.innerText === "No comments yet.") {
+                listDiv.innerHTML = "";
+            }
+
+            let commentHtml = `
+                <div class="p-3 bg-slate-50 rounded border border-slate-200 mb-2">
+                    <p class="text-slate-800 font-medium">${text}</p>
+                    ${url ? `<a href="${url}" target="_blank" class="text-blue-600 hover:underline text-xs flex items-center gap-1 mt-1"><i class="fa-solid fa-link"></i> ${url}</a>` : ''}
+                </div>
+            `;
+            listDiv.innerHTML += commentHtml;
+
+            // تفريغ الحقول بعد الإضافة
+            document.getElementById('commentText').value = "";
+            document.getElementById('commentUrl').value = "";
+        }
+        // دالة إظهار وإخفاء قائمة الفلتر
+        function toggleFilterDropdown() {
+            const dropdown = document.getElementById('filter-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // دالة تطبيق الفلتر (يمكنك ربطها بفلترة الجدول لاحقاً)
+        function applyFilter(filterName) {
+            console.log("Filtered by: ", filterName);
+            document.getElementById('filter-dropdown').classList.add('hidden');
+        }
+
+        // إغلاق القائمة عند النقر خارجها
+        window.addEventListener('click', function(e) {
+            const btn = document.getElementById('filter-btn');
+            const dropdown = document.getElementById('filter-dropdown');
+            if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
