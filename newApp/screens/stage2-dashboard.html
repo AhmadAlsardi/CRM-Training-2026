@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #334155; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-4 space-y-4 relative">
+
+    <!-- Top Navigation Header -->
+    <header class="h-14 bg-white border border-slate-200/80 rounded-xl px-4 flex items-center justify-between shrink-0 relative z-30 shadow-sm">
+        <div class="flex items-center gap-3">
+            <button class="text-slate-500 hover:text-slate-700 p-1.5 rounded"><i class="fa-solid fa-bars"></i></button>
+            <div class="relative w-64">
+                <input type="text" placeholder="Search..." class="w-full pl-3 pr-8 py-1.5 bg-slate-100 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
+                <i class="fa-solid fa-magnifying-glass absolute right-2.5 top-2.5 text-xs text-slate-400"></i>
+            </div>
+            
+            <!-- Quick Create Dropdown -->
+            <div class="relative">
+                <button onclick="toggleDropdown('quick-create-menu')" class="w-7 h-7 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-xs transition shadow-sm">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <div id="quick-create-menu" class="hidden absolute left-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-slate-200 p-2 z-50">
+                    <div class="text-[11px] font-semibold text-slate-400 px-2 py-1">Quick Create</div>
+                    <a href="stage2-ticket.html" class="flex items-center gap-2 px-2 py-1.5 text-xs text-slate-700 hover:bg-slate-50 rounded-lg transition">
+                        <i class="fa-solid fa-life-ring text-slate-400"></i> Ticket
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 text-slate-600">
+            <button class="hover:text-slate-900 text-sm"><i class="fa-solid fa-share-nodes"></i></button>
+            <button class="hover:text-slate-900 text-sm"><i class="fa-solid fa-check"></i></button>
+
+            <!-- Profile Dropdown -->
+            <div class="relative">
+                <button onclick="toggleDropdown('profile-menu')" class="w-8 h-8 rounded-full border-2 border-blue-500 p-0.5 overflow-hidden block">
+                    <img src="https://system.smartmediajo.com/assets/images/user-placeholder.jpg" class="w-full h-full rounded-full object-cover">
+                </button>
+                <div id="profile-menu" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50 text-xs">
+                    <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-slate-50">My Profile</a>
+                    <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-slate-50">My Timesheets</a>
+                    <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-slate-50">Edit Profile</a>
+                    <div class="border-t border-slate-100 my-1"></div>
+                    <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-slate-50 flex justify-between items-center">Language <i class="fa-solid fa-caret-right text-slate-400"></i></a>
+                    <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-slate-50">Logout</a>
+                </div>
+            </div>
+
+            <!-- Timer Dropdown with Interactive Active State -->
+            <div class="relative">
+                <button onclick="toggleDropdown('timer-menu')" class="p-1.5 hover:text-slate-900 text-sm relative">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="timer-badge" class="hidden absolute -top-1 -right-1 bg-emerald-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
+                </button>
+
+                <!-- Timer Menu Dropdown Panel -->
+                <div id="timer-menu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-slate-200 p-4 z-50 text-left">
+                    <div id="timer-idle-state" class="text-center">
+                        <i class="fa-regular fa-folder-open text-2xl text-slate-400 mb-2"></i>
+                        <p class="text-xs text-slate-600 font-medium mb-3">No started timers found</p>
+                        <button onclick="startTimerProcess()" class="w-full py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-clock"></i> Start Timer
+                        </button>
+                    </div>
+
+                    <div id="timer-active-state" class="hidden space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-medium text-slate-700" id="timer-start-time">Started at 2026-08-17 3:53 PM</p>
+                                <p class="text-xs font-bold text-emerald-600 mt-1">Total logged time: <span id="timer-counter">00:00</span></p>
+                            </div>
+                            <button onclick="resetTimer()" class="text-slate-400 hover:text-rose-500 text-sm"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                        <button onclick="openStopTimerModal()" class="px-3 py-1.5 bg-rose-50 border border-rose-200 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i class="fa-regular fa-clock"></i> Stop Timer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Dropdown -->
+            <div class="relative">
+                <button onclick="toggleDropdown('notif-menu')" class="p-1.5 hover:text-slate-900 text-sm"><i class="fa-regular fa-bell"></i></button>
+                <div id="notif-menu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-slate-200 p-3 z-50">
+                    <div class="flex justify-between items-center mb-3 text-xs">
+                        <span class="font-semibold text-slate-700">Notifications</span>
+                        <a href="#" class="text-blue-600 hover:underline">Mark all as read</a>
+                    </div>
+                    <div class="bg-slate-50 rounded-lg p-3 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-info"></i> No notifications found
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Main Options Header -->
+    <div class="flex justify-end">
+        <button class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 shadow-sm flex items-center gap-1.5 hover:bg-slate-50">
+            <i class="fa-solid fa-gear"></i> Dashboard Options
+        </button>
+    </div>
+
+    <!-- Top Quick Stat Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-chart-line text-slate-500"></i>
+                <span class="text-xs font-semibold text-slate-700">Converted Leads</span>
+            </div>
+            <span class="text-xs font-bold text-slate-800">0 / 0</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-sliders text-slate-500"></i>
+                <span class="text-xs font-semibold text-slate-700">Projects In Progress</span>
+            </div>
+            <span class="text-xs font-bold text-slate-800">1 / 1</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-regular fa-file-lines text-slate-500"></i>
+                <span class="text-xs font-semibold text-slate-700">Tasks Not Finished</span>
+            </div>
+            <span class="text-xs font-bold text-slate-800">2 / 2</span>
+        </div>
+    </div>
+
+    <!-- Middle Tabs Section & Widgets -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        
+        <!-- Left Tab Panel with Project "test" -->
+        <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200/80 shadow-sm p-4">
+            <div class="flex gap-4 border-b border-slate-100 pb-3 text-xs font-semibold text-slate-500">
+                <button onclick="switchTab('tasks')" id="tab-tasks" class="hover:text-slate-800 flex items-center gap-1.5 pb-3 -mb-3"><i class="fa-solid fa-list-check"></i> My Tasks</button>
+                <button onclick="switchTab('projects')" id="tab-projects" class="text-amber-500 border-b-2 border-amber-400 hover:text-slate-800 flex items-center gap-1.5 pb-3 -mb-3"><i class="fa-solid fa-diagram-project"></i> My Projects</button>
+                <button onclick="switchTab('reminders')" id="tab-reminders" class="hover:text-slate-800 flex items-center gap-1.5 pb-3 -mb-3"><i class="fa-regular fa-clock"></i> My Reminders</button>
+                <a href="stage2-ticket.html" class="hover:text-slate-800 flex items-center gap-1.5 pb-3 -mb-3"><i class="fa-solid fa-life-ring"></i> Tickets</a>
+                <button onclick="switchTab('announcements')" id="tab-announcements" class="hover:text-slate-800 flex items-center gap-1.5 pb-3 -mb-3"><i class="fa-solid fa-bullhorn"></i> Announcements</button>
+            </div>
+
+            <div class="mt-4 flex justify-between items-center text-xs">
+                <a href="#" class="text-blue-600 hover:underline font-medium">View All</a>
+                <div class="flex items-center gap-2">
+                    <input type="text" placeholder="Search.." class="px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+                </div>
+            </div>
+
+            <!-- Interactive Table -->
+            <div class="mt-4 border border-slate-100 rounded-lg overflow-hidden text-xs">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 text-slate-500">
+                        <tr id="table-header">
+                            <th class="p-2.5">#</th>
+                            <th class="p-2.5">Project Name</th>
+                            <th class="p-2.5">Status</th>
+                            <th class="p-2.5">Start Date</th>
+                            <th class="p-2.5">Deadline</th>
+                            <th class="p-2.5">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr class="border-t border-slate-100 hover:bg-slate-50">
+                            <td class="p-2.5 font-bold text-slate-600">1</td>
+                            <td class="p-2.5 font-semibold text-blue-600 hover:underline cursor-pointer" onclick="handleProjectClick()">test</td>
+                            <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-100 text-emerald-700 font-bold">In Progress</span></td>
+                            <td class="p-2.5 text-slate-500">2026-08-17</td>
+                            <td class="p-2.5 text-slate-500">2026-09-01</td>
+                            <td class="p-2.5">
+                                <button onclick="handleProjectClick()" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[11px] font-medium transition">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Side Widgets -->
+        <div class="space-y-4">
+            <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+                <h3 class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5"><i class="fa-regular fa-money-bill-1"></i> Leads Overview</h3>
+                <div class="h-28 flex items-center justify-center bg-slate-50 rounded-lg border border-dashed border-slate-200 text-xs text-slate-400">
+                    No lead data available
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+                <h3 class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> Statistics by Project Status</h3>
+                <div class="h-28 flex items-center justify-center bg-slate-50 rounded-lg border border-dashed border-slate-200 text-xs text-slate-400">
+                    1 Project in Progress
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Calendar Component -->
+    <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-4">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4">
+            <div class="flex items-center gap-2">
+                <div class="inline-flex rounded-lg border border-slate-200 bg-slate-800 text-white overflow-hidden text-xs">
+                    <button class="px-3 py-1.5 hover:bg-slate-700 border-r border-slate-700"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="px-3 py-1.5 hover:bg-slate-700"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <button class="px-3 py-1.5 bg-slate-600 hover:bg-slate-700 text-white text-xs font-medium rounded-lg">Today</button>
+                <button class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded-lg">Expand</button>
+            </div>
+
+            <h2 class="text-lg font-bold text-slate-700">August 2026</h2>
+
+            <div class="inline-flex rounded-lg border border-slate-200 bg-slate-800 text-white overflow-hidden text-xs">
+                <button class="px-3 py-1.5 bg-slate-900 font-bold border-r border-slate-700">Month</button>
+                <button class="px-3 py-1.5 hover:bg-slate-700 border-r border-slate-700">Week</button>
+                <button class="px-3 py-1.5 hover:bg-slate-700 border-r border-slate-700">Day</button>
+                <button class="px-3 py-1.5 hover:bg-slate-700">Filter By</button>
+            </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-lg overflow-hidden text-xs">
+            <div class="grid grid-cols-7 bg-slate-50 text-blue-600 font-semibold border-b border-slate-200 text-center py-2">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            
+            <div class="grid grid-cols-7 grid-rows-5 gap-px bg-slate-200 text-slate-600">
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">26</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">27</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">28</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">29</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">30</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">31</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">1</div>
+
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">2</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">3</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">4</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">5</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">6</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">7</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">8</div>
+
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">9</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">10</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">11</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">12</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">13</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">14</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">15</div>
+
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">16</div>
+                <div class="bg-amber-50 p-2 min-h-[60px] font-bold text-blue-600 text-right border-2 border-amber-300">17</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">18</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">19</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">20</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">21</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">22</div>
+
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">23</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">24</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">25</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">26</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">27</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">28</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">29</div>
+
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">30</div>
+                <div class="bg-white p-2 min-h-[60px] font-bold text-blue-600 text-right">31</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">1</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">2</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">3</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">4</div>
+                <div class="bg-white p-2 min-h-[60px] text-slate-400 text-right">5</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STOP TIMER FULLSCREEN OVERLAY MODAL -->
+    <div id="stop-timer-modal" class="hidden fixed inset-0 bg-white/95 z-50 flex flex-col items-center justify-center p-4">
+        <button onclick="closeStopTimerModal()" class="absolute top-6 right-8 text-slate-400 hover:text-slate-700 text-2xl font-light">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="w-full max-w-md text-center space-y-6">
+            <h2 class="text-2xl font-bold text-slate-700">Stop Timer</h2>
+
+            <form onsubmit="submitTimerNote(event)" class="space-y-4">
+                <div>
+                    <select class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-500 focus:outline-none">
+                        <option value="">Search Tasks</option>
+                        <option value="1">Task 1 - Initial System Setup</option>
+                        <option value="2">Task 2 - UI & Timer Testing</option>
+                    </select>
+                </div>
+
+                <div>
+                    <textarea rows="4" placeholder="Note" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none text-slate-700" required></textarea>
+                </div>
+
+                <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-lg transition shadow-sm">
+                    Confirm
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Interactive Logic JavaScript -->
+    <script>
+let timerInterval = null;
+let secondsPassed = 0;
+
+let activeTaskId = null;
+let activeTaskName = null;
+
+        function toggleDropdown(id) {
+            const ids = ['quick-create-menu', 'profile-menu', 'timer-menu', 'notif-menu'];
+            ids.forEach(m => {
+                const el = document.getElementById(m);
+                if (m === id) {
+                    el.classList.toggle('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+
+        function handleProjectClick() {
+            window.parent.postMessage({ action: 'openProjectStage3' }, '*');
+        }
+
+        function startTimerProcess() {
+            document.getElementById('timer-idle-state').classList.add('hidden');
+            document.getElementById('timer-active-state').classList.remove('hidden');
+            document.getElementById('timer-badge').classList.remove('hidden');
+
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+
+            document.getElementById('timer-start-time').innerText = `Started at ${dateStr} ${hours}:${minutes} ${ampm}`;
+
+            secondsPassed = 0;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsPassed++;
+                const mins = String(Math.floor(secondsPassed / 60)).padStart(2, '0');
+                const secs = String(secondsPassed % 60).padStart(2, '0');
+                document.getElementById('timer-counter').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+function toggleTaskTimer(taskId, taskName) {
+
+    const button = document.getElementById(`task-timer-btn-${taskId}`);
+
+    // إذا نفس التاسك شغال، وقفه
+    if (activeTaskId === taskId) {
+
+        resetTimer();
+
+        activeTaskId = null;
+        activeTaskName = null;
+
+        if (button) {
+            button.innerText = 'Start Timer';
+
+            button.classList.remove('text-red-500');
+            button.classList.add('text-emerald-600');
+        }
+
+        return;
+    }
+
+
+    // إذا في تاسك ثاني شغال، رجّع زرّه Start Timer
+    if (activeTaskId !== null) {
+
+        const oldButton =
+            document.getElementById(`task-timer-btn-${activeTaskId}`);
+
+        if (oldButton) {
+
+            oldButton.innerText = 'Start Timer';
+
+            oldButton.classList.remove('text-red-500');
+            oldButton.classList.add('text-emerald-600');
+        }
+    }
+
+
+    // خزّن التاسك الحالي
+    activeTaskId = taskId;
+    activeTaskName = taskName;
+
+
+    // شغل التايمر اللي فوق
+    startTimerProcess();
+
+
+    // غير زر التاسك لـ Stop Timer
+    if (button) {
+
+        button.innerText = 'Stop Timer';
+
+        button.classList.remove('text-emerald-600');
+        button.classList.add('text-red-500');
+    }
+}
+        function openStopTimerModal() {
+            document.getElementById('timer-menu').classList.add('hidden');
+            document.getElementById('stop-timer-modal').classList.remove('hidden');
+        }
+
+        function closeStopTimerModal() {
+            document.getElementById('stop-timer-modal').classList.add('hidden');
+        }
+
+        function submitTimerNote(e) {
+            e.preventDefault();
+            alert('Timer log saved successfully!');
+            closeStopTimerModal();
+            resetTimer();
+        }
+
+function resetTimer() {
+
+    clearInterval(timerInterval);
+
+    secondsPassed = 0;
+
+    document.getElementById('timer-counter').innerText = '00:00';
+
+    document
+        .getElementById('timer-idle-state')
+        .classList.remove('hidden');
+
+    document
+        .getElementById('timer-active-state')
+        .classList.add('hidden');
+
+    document
+        .getElementById('timer-badge')
+        .classList.add('hidden');
+
+    document
+        .getElementById('timer-menu')
+        .classList.add('hidden');
+
+
+    // رجع زر التاسك لـ Start Timer
+    if (activeTaskId !== null) {
+
+        const button =
+            document.getElementById(`task-timer-btn-${activeTaskId}`);
+
+        if (button) {
+
+            button.innerText = 'Start Timer';
+
+            button.classList.remove('text-red-500');
+
+            button.classList.add('text-emerald-600');
+        }
+    }
+
+
+    activeTaskId = null;
+    activeTaskName = null;
+}
+
+function switchTab(tabName) {
+            const tbody = document.getElementById('table-body');
+            const thead = document.getElementById('table-header');
+
+            // 1. إزالة التنسيق النشط والخط الأصفر عن جميع أزرار التبويبات
+            ['tasks', 'projects', 'reminders', 'announcements'].forEach(name => {
+                const btn = document.getElementById('tab-' + name);
+                if(btn) {
+                    btn.className = "hover:text-slate-800 flex items-center gap-1.5 pb-3 -mb-3";
+                }
+            });
+
+            // 2. إضافة الخط الأصفر والتنسيق النشط للتبويب الحالي
+            const activeBtn = document.getElementById('tab-' + tabName);
+            if(activeBtn) {
+                activeBtn.className = "text-amber-500 border-b-2 border-amber-400 hover:text-slate-800 flex items-center gap-1.5 pb-3 -mb-3";
+            }
+
+            // 3. تغيير محتوى الجدول بناءً على التبويب المضغوط
+          if (tabName === 'tasks') {
+
+    thead.innerHTML = `
+        <tr class="bg-slate-50 text-slate-700 border border-slate-200">
+            <th class="px-3 py-3 font-medium w-[7%]">#</th>
+            <th class="px-3 py-3 font-medium w-[43%]">Name</th>
+            <th class="px-3 py-3 font-medium w-[16%]">Status</th>
+            <th class="px-3 py-3 font-medium w-[14%]">Start Date</th>
+            <th class="px-3 py-3 font-medium w-[10%]">Tags</th>
+            <th class="px-3 py-3 font-medium w-[10%]">Priority</th>
+        </tr>
+    `;
+
+    tbody.innerHTML = `
+
+        <!-- TASK 2414 -->
+        <tr
+            id="task-row-2414"
+            class="task-row group border-t border-rose-100 bg-rose-50/70"
+        >
+
+            <td class="px-3 py-3 align-top">
+                <a
+                    href="#"
+                    onclick="openTaskPage(); return false;"
+                    class="text-blue-600 hover:underline"
+                >
+                    2414
+                </a>
+            </td>
+
+
+            <td class="px-3 py-3 align-top">
+
+                <a
+                    href="#"
+                    onclick="openTaskPage(); return false;"
+                    class="block text-blue-600 hover:underline font-medium mb-1"
+                >
+                    AZR - Ads
+                </a>
+
+                <div class="text-slate-700 mb-1">
+                    #319 - AZR2 - MD
+                </div>
+
+
+                <!-- يظهر عند Hover -->
+                <div
+                    class="
+                        task-actions
+                        opacity-0
+                        group-hover:opacity-100
+                        transition-opacity
+                        duration-150
+                        text-[11px]
+                        mt-1
+                    "
+                >
+
+                    <button
+                        id="task-timer-btn-2414"
+                        onclick="toggleTaskTimer(2414, 'AZR - Ads');"
+                        class="text-emerald-600 hover:underline font-semibold"
+                    >
+                        Start Timer
+                    </button>
+
+                    <span class="text-slate-300 mx-1">|</span>
+
+                    <button
+                        onclick="editTask(2414)"
+                        class="text-blue-600 hover:underline"
+                    >
+                        Edit
+                    </button>
+
+                    <span class="text-slate-300 mx-1">|</span>
+
+                    <button
+                        onclick="deleteTask(2414)"
+                        class="text-red-500 hover:underline"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            </td>
+
+
+            <td class="px-3 py-3 align-top">
+
+                <button
+                    class="
+                        flex
+                        items-center
+                        gap-1.5
+                        border
+                        border-blue-300
+                        bg-blue-50
+                        text-blue-600
+                        rounded-lg
+                        px-3
+                        py-1.5
+                        whitespace-nowrap
+                    "
+                >
+
+                    In Progress
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-down
+                            text-[9px]
+                            text-slate-500
+                        "
+                    ></i>
+
+                </button>
+
+            </td>
+
+
+            <td class="px-3 py-3 align-top text-red-500">
+                2024-01-16
+            </td>
+
+
+            <td class="px-3 py-3 align-top"></td>
+
+
+            <td class="px-3 py-3 align-top">
+
+                <button
+                    class="
+                        flex
+                        items-center
+                        gap-1.5
+                        text-sky-500
+                        whitespace-nowrap
+                    "
+                >
+
+                    Medium
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-down
+                            text-[9px]
+                            text-slate-500
+                        "
+                    ></i>
+
+                </button>
+
+            </td>
+
+        </tr>
+
+
+        <!-- TASK 2415 -->
+        <tr
+            id="task-row-2415"
+            class="task-row group border-t border-rose-100 bg-rose-50/70"
+        >
+
+            <td class="px-3 py-3 align-top">
+                <a
+                    href="#"
+                    onclick="openTaskPage(); return false;"
+                    class="text-blue-600 hover:underline"
+                >
+                    2415
+                </a>
+            </td>
+
+
+            <td class="px-3 py-3 align-top">
+
+                <a
+                    href="#"
+                    onclick="openTaskPage(); return false;"
+                    class="block text-blue-600 hover:underline font-medium mb-1"
+                >
+                    Stabilo - Translation
+                </a>
+
+                <div class="text-slate-700 mb-1">
+                    #35 - Social Media Management - ABC company
+                </div>
+
+
+                <div
+                    class="
+                        task-actions
+                        opacity-0
+                        group-hover:opacity-100
+                        transition-opacity
+                        duration-150
+                        text-[11px]
+                        mt-1
+                    "
+                >
+
+                    <button
+                        id="task-timer-btn-2415"
+                        onclick="toggleTaskTimer(2415, 'Stabilo - Translation');"
+                        class="text-emerald-600 hover:underline font-semibold"
+                    >
+                        Start Timer
+                    </button>
+
+                    <span class="text-slate-300 mx-1">|</span>
+
+                    <button
+                        onclick="editTask(2415)"
+                        class="text-blue-600 hover:underline"
+                    >
+                        Edit
+                    </button>
+
+                    <span class="text-slate-300 mx-1">|</span>
+
+                    <button
+                        onclick="deleteTask(2415)"
+                        class="text-red-500 hover:underline"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            </td>
+
+
+            <td class="px-3 py-3 align-top">
+                <button class="flex items-center gap-1.5 border border-blue-300 bg-blue-50 text-blue-600 rounded-lg px-3 py-1.5">
+                    In Progress
+                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-500"></i>
+                </button>
+            </td>
+
+
+            <td class="px-3 py-3 align-top text-red-500">
+                2024-01-16
+            </td>
+
+
+            <td class="px-3 py-3 align-top"></td>
+
+
+            <td class="px-3 py-3 align-top text-sky-500">
+                Medium
+                <i class="fa-solid fa-chevron-down text-[9px] text-slate-500 ml-1"></i>
+            </td>
+
+        </tr>
+
+
+        <!-- TASK 2418 -->
+        <tr
+            id="task-row-2418"
+            class="task-row group border-t border-rose-100 bg-rose-50/70"
+        >
+
+            <td class="px-3 py-3 align-top">
+                <a href="#" onclick="openTaskPage(); return false;" class="text-blue-600 hover:underline">
+                    2418
+                </a>
+            </td>
+
+
+            <td class="px-3 py-3 align-top">
+
+                <a
+                    href="#"
+                    onclick="openTaskPage(); return false;"
+                    class="block text-blue-600 hover:underline font-medium mb-1"
+                >
+                    ABC - Content
+                </a>
+
+                <div class="text-slate-700 mb-1">
+                    #35 - Social Media Management - ABC company
+                </div>
+
+
+                <div class="opacity-0 group-hover:opacity-100 transition-opacity text-[11px] mt-1">
+
+                    <button
+                        id="task-timer-btn-2418"
+                        onclick="toggleTaskTimer(2418, 'ABC - Content');"
+                        class="text-emerald-600 hover:underline font-semibold"
+                    >
+                        Start Timer
+                    </button>
+
+                    <span class="text-slate-300 mx-1">|</span>
+
+                    <button onclick="editTask(2418)" class="text-blue-600 hover:underline">
+                        Edit
+                    </button>
+
+                    <span class="text-slate-300 mx-1">|</span>
+
+                    <button onclick="deleteTask(2418)" class="text-red-500 hover:underline">
+                        Delete
+                    </button>
+
+                </div>
+
+            </td>
+
+
+            <td class="px-3 py-3 align-top">
+                <button class="flex items-center gap-1.5 border border-blue-300 bg-blue-50 text-blue-600 rounded-lg px-3 py-1.5">
+                    In Progress
+                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-500"></i>
+                </button>
+            </td>
+
+
+            <td class="px-3 py-3 align-top text-red-500">
+                2024-01-16
+            </td>
+
+
+            <td class="px-3 py-3 align-top"></td>
+
+
+            <td class="px-3 py-3 align-top text-sky-500">
+                Medium
+                <i class="fa-solid fa-chevron-down text-[9px] text-slate-500 ml-1"></i>
+            </td>
+
+        </tr>
+
+
+        <!-- TASK 2446 -->
+        <tr
+            id="task-row-2446"
+            class="task-row group border-t border-rose-100 bg-rose-50/70"
+        >
+
+            <td class="px-3 py-3 align-top">
+                <a href="#" onclick="openTaskPage(); return false;" class="text-blue-600 hover:underline">
+                    2446
+                </a>
+            </td>
+
+
+            <td class="px-3 py-3 align-top">
+
+                <a
+                    href="#"
+                    onclick="openTaskPage(); return false;"
+                    class="block text-blue-600 hover:underline font-medium mb-1"
+                >
+                    Rabta App - Content
+                </a>
+
+                <div class="text-slate-700 mb-1">
+                    #322 - Rabta App - Rabta App
+                </div>
+
+
+                <div class="opacity-0 group-hover:opacity-100 transition-opacity text-[11px] mt-1">
+
+                    <button
+                        id="task-timer-btn-2446"
+                        onclick="toggleTaskTimer(2446, 'Rabta App - Content');"
+                        class="text-emerald-600 hover:underline font-semibold"
+                    >
+                        Start Timer
+                    </button>
+
+                    <span class="text-slate-300 mx-1">|</span>
+
+                    <button onclick="editTask(2446)" class="text-blue-600 hover:underline">
+                        Edit
+                    </button>
+
+                    <span class="text-slate-300 mx-1">|</span>
+
+                    <button onclick="deleteTask(2446)" class="text-red-500 hover:underline">
+                        Delete
+                    </button>
+
+                </div>
+
+            </td>
+
+
+            <td class="px-3 py-3 align-top">
+                <button class="flex items-center gap-1.5 border border-blue-300 bg-blue-50 text-blue-600 rounded-lg px-3 py-1.5">
+                    In Progress
+                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-500"></i>
+                </button>
+            </td>
+
+
+            <td class="px-3 py-3 align-top text-red-500">
+                2024-01-16
+            </td>
+
+
+            <td class="px-3 py-3 align-top"></td>
+
+
+            <td class="px-3 py-3 align-top text-sky-500">
+                Medium
+                <i class="fa-solid fa-chevron-down text-[9px] text-slate-500 ml-1"></i>
+            </td>
+
+        </tr>
+    `;
+} else {
+                thead.innerHTML = `<tr class="bg-slate-50 text-slate-500"><th class="p-2.5">Details</th></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No entries found</td></tr>`;
+            }
+        }
+function openTaskPage() {
+            if (window.parent && typeof window.parent.openGlobalTaskModal === 'function') {
+                window.parent.openGlobalTaskModal();
+            } else {
+                console.error("Global modal function not found in parent!");
+            }
+        }
+
+        function closeTaskPage() {
+            const modal = document.getElementById('task-popup-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }                            </script>
+    
+</body>
+</html>
